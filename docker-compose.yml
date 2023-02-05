@@ -15,7 +15,7 @@ services:
     networks:
       - todo-app
     ports:
-      - 9090:9090
+      - ${BIND_ADDRESS}:${BIND_ADDRESS}
 
 networks:
   todo-app:

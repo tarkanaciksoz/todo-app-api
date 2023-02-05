@@ -23,6 +23,6 @@ func Init(logger *log.Logger) model.Config {
 
 	return model.Config{
 		AppEnv:      appEnv,
-		BindAddress: os.Getenv("BIND_ADDRESS"),
+		BindAddress: ":" + os.Getenv("BIND_ADDRESS"),
 	}
 }
