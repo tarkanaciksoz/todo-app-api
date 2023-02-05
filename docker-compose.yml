@@ -1,0 +1,23 @@
+version: '3.9'
+
+services:
+  todo-app-api:
+    container_name: 'todo-app-api'
+    image: 'tarkanaciksoz/todo-app-api:latest'
+    build:
+      context: .
+      args:
+        - ENV=${APP_ENV}
+    restart: unless-stopped
+    environment:
+      ENV: ${APP_ENV}
+      BIND_ADDRESS: ${BIND_ADDRESS}
+    networks:
+      - todo-app
+    ports:
+      - 9090:9090
+
+networks:
+  todo-app:
+    name: todo-app
+    driver: bridge
