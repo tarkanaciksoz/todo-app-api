@@ -3,7 +3,7 @@ package todo
 import (
 	"bytes"
 	"encoding/json"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -55,7 +55,7 @@ func (s *HandlerSuite) TestHandlerGivenWhenGetTodoIsCalled() {
 		s.mockHandler.EXPECT().GetTodo(w, r).Return()
 		s.mockHandler.GetTodo(w, r)
 
-		resp, err := ioutil.ReadAll(w.Result().Body)
+		resp, err := io.ReadAll(w.Result().Body)
 		if err != nil {
 			t.Error("Unresolved Json Body")
 		}
@@ -80,7 +80,7 @@ func (s *HandlerSuite) TestHandlerGivenWhenGetTodoIsCalled() {
 		s.mockHandler.EXPECT().GetTodo(w, r).Return()
 		s.mockHandler.GetTodo(w, r)
 
-		resp, err := ioutil.ReadAll(w.Result().Body)
+		resp, err := io.ReadAll(w.Result().Body)
 		if err != nil {
 			t.Error("Unresolved Json Body")
 		}
@@ -118,7 +118,7 @@ func (s *HandlerSuite) TestHandlerGivenWhenListTodosIsCalled() {
 		s.mockHandler.EXPECT().ListTodos(w, r).Return()
 		s.mockHandler.ListTodos(w, r)
 
-		resp, err := ioutil.ReadAll(w.Result().Body)
+		resp, err := io.ReadAll(w.Result().Body)
 		if err != nil {
 			t.Error("Unresolved Json Body")
 		}
@@ -143,7 +143,7 @@ func (s *HandlerSuite) TestHandlerGivenWhenListTodosIsCalled() {
 		s.mockHandler.EXPECT().ListTodos(w, r).Return()
 		s.mockHandler.ListTodos(w, r)
 
-		resp, err := ioutil.ReadAll(w.Result().Body)
+		resp, err := io.ReadAll(w.Result().Body)
 		if err != nil {
 			t.Error("Unresolved Json Body")
 		}
@@ -178,7 +178,7 @@ func (s *HandlerSuite) TestHandlerGivenWhenCreateTodoIsCalled() {
 		s.mockHandler.EXPECT().CreateTodo(w, r).Return()
 		s.mockHandler.CreateTodo(w, r)
 
-		resp, err := ioutil.ReadAll(w.Result().Body)
+		resp, err := io.ReadAll(w.Result().Body)
 		if err != nil {
 			t.Error("Unresolved Json Body")
 		}
@@ -212,7 +212,7 @@ func (s *HandlerSuite) TestHandlerGivenWhenCreateTodoIsCalled() {
 		s.mockHandler.EXPECT().CreateTodo(w, r).Return()
 		s.mockHandler.CreateTodo(w, r)
 
-		resp, err := ioutil.ReadAll(w.Result().Body)
+		resp, err := io.ReadAll(w.Result().Body)
 		if err != nil {
 			t.Error("Unresolved Json Body")
 		}
@@ -249,7 +249,7 @@ func (s *HandlerSuite) TestHandlerGivenWhenMarkTodoIsCalled() {
 		s.mockHandler.EXPECT().MarkTodo(w, r).Return()
 		s.mockHandler.MarkTodo(w, r)
 
-		resp, err := ioutil.ReadAll(w.Result().Body)
+		resp, err := io.ReadAll(w.Result().Body)
 		if err != nil {
 			t.Error("Unresolved Json Body")
 		}
@@ -284,7 +284,7 @@ func (s *HandlerSuite) TestHandlerGivenWhenMarkTodoIsCalled() {
 		s.mockHandler.EXPECT().MarkTodo(w, r).Return()
 		s.mockHandler.MarkTodo(w, r)
 
-		resp, err := ioutil.ReadAll(w.Result().Body)
+		resp, err := io.ReadAll(w.Result().Body)
 		if err != nil {
 			t.Error("Unresolved Json Body")
 		}
@@ -311,7 +311,7 @@ func (s *HandlerSuite) TestHandlerGivenWhenDeleteTodoIsCalled() {
 		s.mockHandler.EXPECT().DeleteTodo(w, r).Return()
 		s.mockHandler.DeleteTodo(w, r)
 
-		resp, err := ioutil.ReadAll(w.Result().Body)
+		resp, err := io.ReadAll(w.Result().Body)
 		if err != nil {
 			t.Error("Unresolved Json Body")
 		}
@@ -336,7 +336,7 @@ func (s *HandlerSuite) TestHandlerGivenWhenDeleteTodoIsCalled() {
 		s.mockHandler.EXPECT().DeleteTodo(w, r).Return()
 		s.mockHandler.DeleteTodo(w, r)
 
-		resp, err := ioutil.ReadAll(w.Result().Body)
+		resp, err := io.ReadAll(w.Result().Body)
 		if err != nil {
 			t.Error("Unresolved Json Body")
 		}
