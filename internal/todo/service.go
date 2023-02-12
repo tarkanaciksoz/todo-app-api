@@ -17,9 +17,10 @@ type Service interface {
 	Create(t *model.Todo) (*model.Todo, error)
 	Mark(t *model.Todo) (*model.Todo, error)
 	Delete(id int) error
+	Log(logMessage string)
 }
 
-func NewTodoService(l *log.Logger, db DB) TodoService {
+func NewTodoService(l *log.Logger, db DB) Service {
 	return TodoService{
 		L:  l,
 		DB: db,
@@ -44,4 +45,8 @@ func (ts TodoService) Mark(todo *model.Todo) (*model.Todo, error) {
 
 func (ts TodoService) Delete(id int) error {
 	return ts.DB.Delete(id)
+}
+
+func (ts TodoService) Log(logMessage string) {
+	ts.L.Println(logMessage)
 }

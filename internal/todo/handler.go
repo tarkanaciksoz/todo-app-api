@@ -11,7 +11,7 @@ import (
 )
 
 type TodoHandler struct {
-	ts TodoService
+	ts Service
 }
 
 type Handler interface {
@@ -22,74 +22,74 @@ type Handler interface {
 	DeleteTodo(rw http.ResponseWriter, r *http.Request)
 }
 
-func NewTodoHandler(ts TodoService) Handler {
+func NewTodoHandler(ts Service) Handler {
 	return &TodoHandler{
 		ts: ts,
 	}
 }
 
 func (th *TodoHandler) GetTodo(rw http.ResponseWriter, r *http.Request) {
-	th.ts.L.Println("Handle GetTodo method")
+	th.ts.Log("Handle GetTodo method")
 
 	vars := mux.Vars(r)
 
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		th.ts.L.Println("Unable to resolve id " + vars["id"] + ": " + err.Error())
+		th.ts.Log("Unable to resolve id " + vars["id"] + ": " + err.Error())
 		json.NewEncoder(rw).Encode(util.SetAndGetResponse(false, "Unable to resolve id : "+vars["id"], nil, http.StatusBadRequest))
 		return
 	}
 
 	todo, err := th.ts.Get(id)
 	if err != nil {
-		th.ts.L.Println(err.Error())
+		th.ts.Log(err.Error())
 		json.NewEncoder(rw).Encode(util.SetAndGetResponse(false, err.Error(), nil, http.StatusBadRequest))
 		return
 	}
 
 	json.NewEncoder(rw).Encode(util.SetAndGetTodoResponse(true, "Todo Listed Successfully", todo, http.StatusOK))
-	th.ts.L.Println("GetTodo method successfully handled")
+	th.ts.Log("GetTodo method successfully handled")
 }
 
 func (th *TodoHandler) ListTodos(rw http.ResponseWriter, _ *http.Request) {
-	th.ts.L.Println("Handle ListTodos method")
+	th.ts.Log("Handle ListTodos method")
 
 	todos := th.ts.List()
 
 	json.NewEncoder(rw).Encode(util.SetAndGetTodosResponse(true, "Todos Listed Successfully", todos, http.StatusOK))
-	th.ts.L.Println("ListTodos method successfully handled")
+	th.ts.Log("ListTodos method successfully handled")
 }
 
 func (th *TodoHandler) CreateTodo(rw http.ResponseWriter, r *http.Request) {
-	th.ts.L.Println("Handle CreateTodo method")
+	th.ts.Log("Handle CreateTodo method")
 
 	todo := &model.Todo{}
 	err := todo.FromJSON(r.Body)
 	if err != nil {
-		th.ts.L.Println("Request Body Couldn't Resolved - Invalid JSON Data : " + err.Error())
+		th.ts.Log("Request Body Couldn't Resolved - Invalid JSON Data : " + err.Error())
 		json.NewEncoder(rw).Encode(util.SetAndGetResponse(false, "Invalid JSON Data", nil, http.StatusBadRequest))
 		return
 	}
 
 	todo, err = th.ts.Create(todo)
 	if err != nil {
-		th.ts.L.Println(err.Error())
+		th.ts.Log(err.Error())
 		json.NewEncoder(rw).Encode(util.SetAndGetResponse(false, err.Error(), nil, http.StatusBadRequest))
 		return
 	}
 
 	json.NewEncoder(rw).Encode(util.SetAndGetTodoResponse(true, "Todo Created Successfully", todo, http.StatusOK))
-	th.ts.L.Println("CreateTodo method successfully handled")
+	th.ts.Log("CreateTodo method successfully handled")
 }
 
 func (th *TodoHandler) MarkTodo(rw http.ResponseWriter, r *http.Request) {
-	th.ts.L.Println("Handle MarkTodo method")
+	th.ts.Log("Handle MarkTodo method")
 
 	vars := mux.Vars(r)
 
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		th.ts.L.Println("Unable to convert id " + vars["id"] + ": " + err.Error())
+		th.ts.Log("Unable to convert id " + vars["id"] + ": " + err.Error())
 		json.NewEncoder(rw).Encode(util.SetAndGetResponse(false, "Unable to convert id : "+vars["id"], nil, http.StatusBadRequest))
 		return
 	}
@@ -100,34 +100,34 @@ func (th *TodoHandler) MarkTodo(rw http.ResponseWriter, r *http.Request) {
 
 	todo, err = th.ts.Mark(todo)
 	if err != nil {
-		th.ts.L.Println(err.Error())
+		th.ts.Log(err.Error())
 		json.NewEncoder(rw).Encode(util.SetAndGetResponse(false, err.Error(), nil, http.StatusBadRequest))
 		return
 	}
 
 	json.NewEncoder(rw).Encode(util.SetAndGetTodoResponse(true, "Todo Marked Successfully", todo, http.StatusOK))
-	th.ts.L.Println("MarkTodo method successfully handled")
+	th.ts.Log("MarkTodo method successfully handled")
 }
 
 func (th *TodoHandler) DeleteTodo(rw http.ResponseWriter, r *http.Request) {
-	th.ts.L.Println("Handle DeleteTodo method")
+	th.ts.Log("Handle DeleteTodo method")
 
 	vars := mux.Vars(r)
 
 	id, err := strconv.Atoi(vars["id"])
 	if err != nil {
-		th.ts.L.Println("Unable to convert id " + vars["id"] + ": " + err.Error())
+		th.ts.Log("Unable to convert id " + vars["id"] + ": " + err.Error())
 		json.NewEncoder(rw).Encode(util.SetAndGetResponse(false, "Unable to convert id : "+vars["id"], nil, http.StatusBadRequest))
 		return
 	}
 
 	err = th.ts.Delete(id)
 	if err != nil {
-		th.ts.L.Println(err.Error())
+		th.ts.Log(err.Error())
 		json.NewEncoder(rw).Encode(util.SetAndGetResponse(false, err.Error(), nil, http.StatusBadRequest))
 		return
 	}
 
 	json.NewEncoder(rw).Encode(util.SetAndGetResponse(true, "Todo Deleted Successfully", nil, http.StatusOK))
-	th.ts.L.Println("DeleteTodo method successfully handled")
+	th.ts.Log("DeleteTodo method successfully handled")
 }

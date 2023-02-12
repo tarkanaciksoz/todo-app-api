@@ -6,7 +6,6 @@ require (
 	github.com/gorilla/mux v1.8.0
 	github.com/joho/godotenv v1.5.0
 	github.com/stretchr/testify v1.8.1
-	golang.org/x/exp v0.0.0-20230203172020-98cc5a0785f9
 )
 
 require (

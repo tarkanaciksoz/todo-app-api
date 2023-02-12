@@ -1,5 +1,6 @@
 FROM golang:1.19-alpine
 ARG ENV
+ARG BIND_ADDRESS
 WORKDIR /app
 
 RUN apk add -q --update \

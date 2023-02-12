@@ -92,6 +92,18 @@ func (mr *MockServiceMockRecorder) List() *gomock.Call {
 	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "List", reflect.TypeOf((*MockService)(nil).List))
 }
 
+// Log mocks base method.
+func (m *MockService) Log(arg0 string) {
+	m.ctrl.T.Helper()
+	m.ctrl.Call(m, "Log", arg0)
+}
+
+// Log indicates an expected call of Log.
+func (mr *MockServiceMockRecorder) Log(arg0 interface{}) *gomock.Call {
+	mr.mock.ctrl.T.Helper()
+	return mr.mock.ctrl.RecordCallWithMethodType(mr.mock, "Log", reflect.TypeOf((*MockService)(nil).Log), arg0)
+}
+
 // Mark mocks base method.
 func (m *MockService) Mark(arg0 *model.Todo) (*model.Todo, error) {
 	m.ctrl.T.Helper()
