@@ -23,13 +23,13 @@ func Init(logger *log.Logger) *mux.Router {
 		model.Route{
 			Name:        "GET TODO",
 			Method:      http.MethodGet,
-			Pattern:     "/todo/getTodo/{id:[0-9]+}",
+			Pattern:     "/v1/todo/getTodo/{id:[0-9]+}",
 			HandlerFunc: todoHandler.GetTodo,
 		},
 		model.Route{
 			Name:        "GET TODO LIST",
 			Method:      http.MethodGet,
-			Pattern:     "/todo/getTodos",
+			Pattern:     "/v1/todo/getTodos",
 			HandlerFunc: todoHandler.ListTodos,
 		},
 	}
@@ -38,7 +38,7 @@ func Init(logger *log.Logger) *mux.Router {
 		model.Route{
 			Name:        "CREATE NEW TODO",
 			Method:      http.MethodPost,
-			Pattern:     "/todo/createTodo",
+			Pattern:     "/v1/todo/createTodo",
 			HandlerFunc: todoHandler.CreateTodo,
 		},
 	}
@@ -47,7 +47,7 @@ func Init(logger *log.Logger) *mux.Router {
 		model.Route{
 			Name:        "MARK - UNMARK TODO",
 			Method:      http.MethodPut,
-			Pattern:     "/todo/markTodo/{id:[0-9]+}",
+			Pattern:     "/v1/todo/markTodo/{id:[0-9]+}",
 			HandlerFunc: todoHandler.MarkTodo,
 		},
 	}
@@ -56,8 +56,24 @@ func Init(logger *log.Logger) *mux.Router {
 		model.Route{
 			Name:        "DELETE TODO",
 			Method:      http.MethodDelete,
-			Pattern:     "/todo/deleteTodo/{id:[0-9]+}",
+			Pattern:     "/v1/todo/deleteTodo/{id:[0-9]+}",
 			HandlerFunc: todoHandler.DeleteTodo,
+		},
+	}
+
+	// added for cors
+	mappedRoutes[http.MethodOptions] = model.Routes{
+		model.Route{
+			Name:        "CORS MARK - UNMARK TODO",
+			Method:      http.MethodOptions,
+			Pattern:     "/v1/todo/markTodo/{id:[0-9]+}",
+			HandlerFunc: OptionsHandler,
+		},
+		model.Route{
+			Name:        "CORS DELETE TODO",
+			Method:      http.MethodOptions,
+			Pattern:     "/v1/todo/deleteTodo/{id:[0-9]+}",
+			HandlerFunc: OptionsHandler,
 		},
 	}
 
