@@ -1,0 +1,39 @@
+sudo: required
+
+services:
+  - docker
+
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  ECR_REPOSITORY: "todo-app-api"
+  DOCKER_REPOSITORY: "tarkanaciksoz/todo-app-api"
+
+before_script:
+  - apt update -qq
+  - apt install -y -qq awscli
+
+build:
+  stage: build
+  script:
+    - make build-prod
+
+test:
+  stage: test
+  script:
+    - echo "Running tests"
+    - make test
+    - echo "Tests done"
+
+deploy:
+  stage: deploy
+  on: 
+    branch: master
+  script:
+    - echo "Deploying image"
+    - $(aws ecr get-login --no-include-email)
+    - docker tag $DOCKER_REPOSITORY:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPOSITORY:latest
+    - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPOSITORY:latest
