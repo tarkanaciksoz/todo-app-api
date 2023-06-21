@@ -50,7 +50,7 @@ func (s *HandlerSuite) TestHandlerGivenWhenGetTodoIsCalled() {
 
 		w := httptest.NewRecorder()
 		json.NewEncoder(w).Encode(expectedResponse)
-		r := httptest.NewRequest(http.MethodGet, "/todo/getTodo/1", nil)
+		r := httptest.NewRequest(http.MethodGet, "/todo/1", nil)
 
 		s.mockHandler.EXPECT().GetTodo(w, r).Return()
 		s.mockHandler.GetTodo(w, r)
@@ -71,11 +71,11 @@ func (s *HandlerSuite) TestHandlerGivenWhenGetTodoIsCalled() {
 	})
 
 	s.T().Run("TestHandlerGivenUnExistingTodoIdWhenGetTodoIsCalledThenItSouldReturnGetTodoResponseWithSuccessFalseAndNoTodoFoundWithId1MessageAndDataWithNilAndCodeAs400", func(t *testing.T) {
-		expectedResponse := util.SetAndGetTodoResponse(false, "no todo found with id:1", nil, 400)
+		expectedResponse := util.SetAndGetTodoResponse(false, "no todo found with id:1", nil, 404)
 
 		w := httptest.NewRecorder()
 		json.NewEncoder(w).Encode(expectedResponse)
-		r := httptest.NewRequest(http.MethodGet, "/todo/getTodo/1", nil)
+		r := httptest.NewRequest(http.MethodGet, "/todo/1", nil)
 
 		s.mockHandler.EXPECT().GetTodo(w, r).Return()
 		s.mockHandler.GetTodo(w, r)
@@ -113,7 +113,7 @@ func (s *HandlerSuite) TestHandlerGivenWhenListTodosIsCalled() {
 
 		w := httptest.NewRecorder()
 		json.NewEncoder(w).Encode(expectedResponse)
-		r := httptest.NewRequest(http.MethodGet, "/todo/getTodos", nil)
+		r := httptest.NewRequest(http.MethodGet, "/todo", nil)
 
 		s.mockHandler.EXPECT().ListTodos(w, r).Return()
 		s.mockHandler.ListTodos(w, r)
@@ -138,7 +138,7 @@ func (s *HandlerSuite) TestHandlerGivenWhenListTodosIsCalled() {
 
 		w := httptest.NewRecorder()
 		json.NewEncoder(w).Encode(expectedResponse)
-		r := httptest.NewRequest(http.MethodGet, "/todo/getTodos", nil)
+		r := httptest.NewRequest(http.MethodGet, "/todo", nil)
 
 		s.mockHandler.EXPECT().ListTodos(w, r).Return()
 		s.mockHandler.ListTodos(w, r)
@@ -173,7 +173,7 @@ func (s *HandlerSuite) TestHandlerGivenWhenCreateTodoIsCalled() {
 
 		w := httptest.NewRecorder()
 		json.NewEncoder(w).Encode(expectedResponse)
-		r := httptest.NewRequest(http.MethodPost, "/todo/createTodo", &body)
+		r := httptest.NewRequest(http.MethodPost, "/todo", &body)
 
 		s.mockHandler.EXPECT().CreateTodo(w, r).Return()
 		s.mockHandler.CreateTodo(w, r)
@@ -207,7 +207,7 @@ func (s *HandlerSuite) TestHandlerGivenWhenCreateTodoIsCalled() {
 
 		w := httptest.NewRecorder()
 		json.NewEncoder(w).Encode(expectedResponse)
-		r := httptest.NewRequest(http.MethodPost, "/todo/createTodo", &body)
+		r := httptest.NewRequest(http.MethodPost, "/todo", &body)
 
 		s.mockHandler.EXPECT().CreateTodo(w, r).Return()
 		s.mockHandler.CreateTodo(w, r)
@@ -231,7 +231,6 @@ func (s *HandlerSuite) TestHandlerGivenWhenCreateTodoIsCalled() {
 func (s *HandlerSuite) TestHandlerGivenWhenMarkTodoIsCalled() {
 	s.T().Run("TestHandlerGivenUnMarkedIdWhenMarkTodoIsCalledThenItSouldReturnGetTodoResponseWithSuccessTrueAndTodoMarkedSuccessfullyMessageAndDataWithTodo.MarkedAs1AndCodeAs200", func(t *testing.T) {
 		todo := &model.Todo{
-			ID:     1,
 			Value:  "buy some milk",
 			Marked: 0,
 		}
@@ -244,7 +243,7 @@ func (s *HandlerSuite) TestHandlerGivenWhenMarkTodoIsCalled() {
 
 		w := httptest.NewRecorder()
 		json.NewEncoder(w).Encode(expectedResponse)
-		r := httptest.NewRequest(http.MethodPut, "/todo/markTodo", &body)
+		r := httptest.NewRequest(http.MethodPut, "/todo", &body)
 
 		s.mockHandler.EXPECT().MarkTodo(w, r).Return()
 		s.mockHandler.MarkTodo(w, r)
@@ -279,7 +278,7 @@ func (s *HandlerSuite) TestHandlerGivenWhenMarkTodoIsCalled() {
 
 		w := httptest.NewRecorder()
 		json.NewEncoder(w).Encode(expectedResponse)
-		r := httptest.NewRequest(http.MethodPut, "/todo/markTodo", &body)
+		r := httptest.NewRequest(http.MethodPut, "/todo", &body)
 
 		s.mockHandler.EXPECT().MarkTodo(w, r).Return()
 		s.mockHandler.MarkTodo(w, r)
@@ -306,7 +305,7 @@ func (s *HandlerSuite) TestHandlerGivenWhenDeleteTodoIsCalled() {
 
 		w := httptest.NewRecorder()
 		json.NewEncoder(w).Encode(expectedResponse)
-		r := httptest.NewRequest(http.MethodDelete, "/todo/deleteTodo/1", nil)
+		r := httptest.NewRequest(http.MethodDelete, "/todo/1", nil)
 
 		s.mockHandler.EXPECT().DeleteTodo(w, r).Return()
 		s.mockHandler.DeleteTodo(w, r)
@@ -327,11 +326,11 @@ func (s *HandlerSuite) TestHandlerGivenWhenDeleteTodoIsCalled() {
 	})
 
 	s.T().Run("TestHandlerGivenUnExistingIdWhenDeleteTodoIsCalledThenItSouldReturnGetTodoResponseWithSuccessFalseAndNoTodoFoundWithId1MessageAndDataWithEmptyTodoAndCodeAs400", func(t *testing.T) {
-		expectedResponse := util.SetAndGetTodoResponse(false, "no todo found with id:1", nil, 400)
+		expectedResponse := util.SetAndGetTodoResponse(false, "no todo found with id:1", nil, 404)
 
 		w := httptest.NewRecorder()
 		json.NewEncoder(w).Encode(expectedResponse)
-		r := httptest.NewRequest(http.MethodDelete, "/todo/deleteTodo/1", nil)
+		r := httptest.NewRequest(http.MethodDelete, "/todo/1", nil)
 
 		s.mockHandler.EXPECT().DeleteTodo(w, r).Return()
 		s.mockHandler.DeleteTodo(w, r)

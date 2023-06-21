@@ -82,11 +82,7 @@ func (m Memory) Mark(todo *model.Todo) (*model.Todo, error) {
 		return nil, errors.New("no todo found with id:" + strconv.Itoa(todo.ID))
 	}
 
-	if m.Todos[todo.ID].Marked == 0 {
-		m.Todos[todo.ID].Marked = 1
-	} else {
-		m.Todos[todo.ID].Marked = 0
-	}
+	m.Todos[todo.ID] = todo
 
 	return m.Todos[todo.ID], nil
 }

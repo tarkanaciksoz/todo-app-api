@@ -94,9 +94,14 @@ func (th *TodoHandler) MarkTodo(rw http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	todo := &model.Todo{
-		ID: id,
+	todo := &model.Todo{}
+	err = todo.FromJSON(r.Body)
+	if err != nil {
+		th.ts.Log("Request Body Couldn't Resolved - Invalid JSON Data : " + err.Error())
+		json.NewEncoder(rw).Encode(util.SetAndGetResponse(false, "Invalid JSON Data", nil, http.StatusBadRequest))
+		return
 	}
+	todo.ID = id
 
 	todo, err = th.ts.Mark(todo)
 	if err != nil {
