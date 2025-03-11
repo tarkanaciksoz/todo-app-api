@@ -1,4 +1,4 @@
-module github.com/tarkanaciksoz/todo-app-api
+module github.com/tarkanaciksoz/api-todo-app
 
 go 1.19
 

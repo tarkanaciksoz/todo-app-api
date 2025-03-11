@@ -1,39 +1,44 @@
-sudo: required
-
-services:
-  - docker
+variables:
+  DOCKER_REGISTRY: 496965460335.dkr.ecr.eu-west-1.amazonaws.com
+  APP_NAME: todo-app-api
+  AWS_DEFAULT_REGION: eu-west-1
+  DOCKER_HOST: tcp://docker:2375
+  AWS_USERNAME: AWS
 
 stages:
-  - build
+  - build-to-gitlab
   - test
-  - deploy
+  - build-to-aws-ecr
 
-variables:
-  ECR_REPOSITORY: "todo-app-api"
-  DOCKER_REPOSITORY: "tarkanaciksoz/todo-app-api"
 
-before_script:
-  - apt update -qq
-  - apt install -y -qq awscli
-
-build:
-  stage: build
+build-to-gitlab:
+  stage: build-to-gitlab
+  image: docker
+  services:
+    - docker:dind
   script:
-    - make build-prod
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY_IMAGE:latest --password-stdin
+    - docker build -t $CI_REGISTRY_IMAGE:latest --build-arg="ENV=prod" --build-arg="BIND_ADDRESS=9090" .
+    - docker push $CI_REGISTRY_IMAGE:latest
 
 test:
   stage: test
+  image: $CI_REGISTRY_IMAGE:latest
   script:
-    - echo "Running tests"
-    - make test
-    - echo "Tests done"
+    - CGO_ENABLED=0 APP_ENV=prod go test -v ./...
 
-deploy:
-  stage: deploy
-  on: 
-    branch: master
+build-to-aws-ecr:
+  stage: build-to-aws-ecr
+  image:
+    name: amazon/aws-cli
+    entrypoint: [""]
+  services:
+    - docker:dind
+  before_script:
+    - amazon-linux-extras install docker
+    - aws --version
+    - docker --version
   script:
-    - echo "Deploying image"
-    - $(aws ecr get-login --no-include-email)
-    - docker tag $DOCKER_REPOSITORY:latest $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPOSITORY:latest
-    - docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$ECR_REPOSITORY:latest
+    - docker build -t $DOCKER_REGISTRY/$APP_NAME:latest .
+    - aws ecr get-login-password | docker login -u $AWS_USERNAME --password-stdin $DOCKER_REGISTRY
+    - docker push $DOCKER_REGISTRY/$APP_NAME:latest
